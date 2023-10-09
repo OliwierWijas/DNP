@@ -1,0 +1,84 @@
+﻿@page "/EditSubForm/{id:int}"
+@using global::Shared.DTOs
+@using global::Shared
+@using HttpClient.ClientInterfaces
+@inject IUserService userService
+@inject ISubFormService subFormService
+@inject NavigationManager navMgr
+
+<div class="card">
+    <h3>EditSubForm</h3>
+    @if (!string.IsNullOrEmpty(username))
+    {
+        @if (dto is null)
+        {
+            <span>Loading sub form...</span>
+        }
+        else
+        {
+            <div class="form-group field">
+                <label>Id:</label>
+                <input type="text" @bind="Id" readonly/>
+            </div>
+            <div class="form-group field">
+                <label>New name:</label>
+                <input type="text" @bind="dto.Name" @bind:event="oninput"/>
+            </div>
+            <div class="button-row">
+                <button @onclick="UpdateAsync" class="acceptbtn">Edit</button>
+            </div>
+        }
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <label style="color: red">@message</label>
+        }
+    }
+    else
+    {
+        <label>Access Denied</label>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private string? username;
+    private SubFormUpdateDto dto = null!;
+    private string name;
+    private string message;
+
+    protected override async Task OnInitializedAsync()
+    {
+        message = "";
+        try
+        {
+            username = userService.getUsername();
+            SubFormBasicDto dtoData = await subFormService.GetByIdAsync(Id);
+            name = dtoData.Name;
+            dto = new(Id)
+            {
+                Name = name
+            };
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            message = e.Message;
+        }
+    }
+
+    private async Task UpdateAsync()
+    {
+        try
+        {
+            await subFormService.UpdateAsync(dto);
+            navMgr.NavigateTo("/ViewSubForms");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            message = e.Message;
+        }
+    }
+}

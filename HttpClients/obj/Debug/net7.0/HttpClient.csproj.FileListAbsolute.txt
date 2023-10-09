@@ -1,0 +1,15 @@
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\bin\Debug\net7.0\HttpClient.deps.json
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\bin\Debug\net7.0\HttpClient.dll
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\bin\Debug\net7.0\HttpClient.pdb
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\bin\Debug\net7.0\Shared.dll
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\bin\Debug\net7.0\Shared.pdb
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\obj\Debug\net7.0\HttpClient.csproj.AssemblyReference.cache
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\obj\Debug\net7.0\HttpClient.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\obj\Debug\net7.0\HttpClient.AssemblyInfoInputs.cache
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\obj\Debug\net7.0\HttpClient.AssemblyInfo.cs
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\obj\Debug\net7.0\HttpClient.csproj.CoreCompileInputs.cache
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\obj\Debug\net7.0\HttpClient.csproj.CopyComplete
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\obj\Debug\net7.0\HttpClient.dll
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\obj\Debug\net7.0\refint\HttpClient.dll
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\obj\Debug\net7.0\HttpClient.pdb
+C:\Users\oliwi\RiderProjects\Assignment\HttpClient\obj\Debug\net7.0\ref\HttpClient.dll

@@ -1,0 +1,131 @@
+﻿@page "/ViewSubForms"
+@using global::Shared
+@using UIComponents
+@using HttpClient.ClientInterfaces
+@inject NavigationManager navMgr
+@inject IUserService userService
+@inject ISubFormService subFormService
+
+<div class="card" style="width: 100%">
+    <h3>ViewSubForms</h3>
+    <Modal ShowModal="showModal">
+        <p>The sub form has been successfully deleted.</p>
+        <button @onclick="@(() => { showModal = false; })">Continue</button>
+    </Modal>
+    @if (!string.IsNullOrEmpty(username))
+    {
+        <div class="filter-bar">
+            <div class="filters-container">
+                <img src="icons/@(doShowFilters ? "clear_" : "")funnel.png" class="funnel" @onclick="@(() => doShowFilters = !doShowFilters)" alt="Funnel"/>
+                @if (doShowFilters)
+                {
+                    <div class="filter">
+                        <label>Name:</label>
+                        <input type="text" style="width: 120px" @bind="nameFilter"/>
+                    </div>
+                }
+            </div>
+        </div>
+        <button @onclick="LoadSubForms">Load</button>
+
+        @if (subForms == null)
+        {
+            <span>Loading...</span>
+        }
+        else if (!subForms.Any())
+        {
+            <span>No sub forms to be found.</span>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Sub Form Id</th>
+                    <th>Name</th>
+                    <th>Enter</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (SubForm subForm in subForms)
+                {
+                    <tr>
+                        <td>@subForm.Id</td>
+                        <td>@subForm.Name</td>
+                        <td>
+                            <label @onclick="@(() => navMgr.NavigateTo($"/ManagePosts?subformid={subForm.Id}"))" style="cursor: pointer">Display</label>
+                        </td>
+                        <td>
+                            <img src="icons/edit.gif" class="funnel" @onclick="@(() => navMgr.NavigateTo($"/EditSubForm/{subForm.Id}"))" style="cursor: pointer"/>
+                        </td>
+                        <td>
+                            <label @onclick="@(() => RemoveSubForm(subForm.Id))" style="cursor: pointer; color: red; font-weight: bold">
+                                &#x2717
+                            </label>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <label style="color: red">@message</label>
+        }
+    }
+    else
+    {
+        <label>Access denied</label>
+    }
+</div>
+
+
+@code {
+    private string username;
+    private IEnumerable<SubForm>? subForms;
+    private string message = "";
+    private bool doShowFilters = false;
+    private bool showModal = false;
+
+    private string? nameFilter;
+
+    protected override async Task OnInitializedAsync()
+    {
+        username = userService.getUsername();
+        await LoadSubForms();
+    }
+
+    private async Task LoadSubForms()
+    {
+        try
+        {
+            username = userService.getUsername();
+            subForms = await subFormService.GetAsync(username, nameFilter);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            message = e.Message;
+        }
+    }
+
+    private async Task RemoveSubForm(int id)
+    {
+        message = "";
+        try
+        {
+            await subFormService.DeleteAsync(id);
+            var list = new List<SubForm>(subForms!);
+            list.RemoveAll(subForm => subForm.Id == id);
+            subForms = list.AsEnumerable();
+            showModal = true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            message = e.Message;
+        }
+    }
+}

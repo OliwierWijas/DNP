@@ -1,0 +1,125 @@
+﻿@page "/DisplayPost"
+@using global::Shared
+@using global::Shared.DTOs
+@using HttpClient.ClientInterfaces
+@using UIComponents
+@inject IUserService userService
+@inject IPostService postService
+@inject ICommentService commentService
+
+<div class="card">
+    <h3>Display Post</h3>
+    @if (!string.IsNullOrEmpty(username))
+    {
+        @if (dto is null || comments is null)
+        {
+            <label>Loading...</label>
+        }
+        else
+        {
+            <Modal ShowModal="showModal">
+                <p>A comment has been added.</p>
+                <button @onclick="@(() => showModal = false)">Continue</button>
+            </Modal>
+            <div class="form-group field">
+                <label>Post</label>
+            </div>
+            <div class="form-group field">
+                <label>Title:</label>
+                <input type="text" @bind="@dto.Title" readonly/>
+            </div>
+            <div class="form-group field">
+                <label>Body:</label>
+                <input type="text" @bind="@dto.Body" readonly/>
+            </div>
+            @if (!string.IsNullOrEmpty(message))
+            {
+                <label style="color: red">@message</label>
+            }
+        }
+    }
+    else
+    {
+        <label>Access Denied</label>
+    }
+</div>
+@if (!string.IsNullOrEmpty(username) && dto is not null && comments is not null)
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Comment</th>
+        </tr>
+        <tr>
+            <th>@username</th>
+            <th>
+                <input type="text" @bind="text" @bind:event="oninput"/>
+            </th>
+            <th>
+                <button @onclick="WriteCommentAsync" class="acceptbtn">Comment</button>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (Comment comment in comments)
+        {
+            <tr>
+                <td>@comment.User.Username</td>
+                <td>@comment.Text</td>
+            </tr>
+        }
+        </tbody>
+    </table>  
+}
+else
+{
+    <label>Data loading...</label>
+}
+
+@code {
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "id")]
+    public int Id { get; set; }
+
+    private PostBasicDto dto;
+    private string? username;
+    private string text;
+    private IEnumerable<Comment>? comments;
+
+    private string message;
+    private bool showModal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        message = "";
+        try
+        {
+            username = userService.getUsername();
+            dto = await postService.GetByIdAsync(Id);
+            comments = await commentService.GetAsync(Id);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            message = e.Message;
+        }
+    }
+
+    private async Task WriteCommentAsync()
+    {
+        try
+        {
+            await commentService.CreateAsync(new CommentCreationDto(Id, username, text));
+            comments = await commentService.GetAsync(Id);
+            text = "";
+            showModal = true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            message = e.Message;
+        }
+    }
+}

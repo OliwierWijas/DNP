@@ -1,0 +1,11 @@
+﻿using Shared;
+
+namespace Application.DaoInterfaces;
+
+public interface IUserDao
+{
+    Task<User> CreateAsync(User user);
+    Task<User?> GetByUsernameAsync(string username);
+    Task UpdateAsync(string username, User updated);
+    Task DeleteAsync(string username);
+}

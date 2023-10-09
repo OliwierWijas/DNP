@@ -1,0 +1,104 @@
+﻿@page "/CreatePost"
+@inject IPostService postService
+@inject ISubFormService subFormService
+@inject IUserService userService;
+@inject NavigationManager navMgr
+@using UIComponents
+@using global::Shared.DTOs
+@using global::Shared
+@using HttpClient.ClientInterfaces
+
+<div class="card">
+    <h3>Create Post</h3>
+    @if (!string.IsNullOrEmpty(username))
+    {
+        @if (subForms == null)
+        {
+            <label>Loading sub forms...</label>
+        }
+        else if (!subForms.Any())
+        {
+            <label>No sub forms in the system. Post cannot be created.</label>
+        }
+        else
+        {
+            <Modal ShowModal="showModal">
+                <p>A new post has been successfully created.</p>
+                <button @onclick="@(() => { showModal = false; navMgr.NavigateTo($"/ManagePosts?subformid={subFormId}");})">Continue</button>
+            </Modal>
+            <div class="form-group field">
+                <label>Sub Form</label>
+                <select @bind="subFormId">
+                    <option>Choose</option>
+                    @foreach (SubForm subForm in subForms)
+                    {
+                        <option value="@subForm.Id">@subForm.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group field">
+                <label>Title:</label>
+                <input type="text" @bind="title"/>
+            </div>
+            <div class="form-group field">
+                <label>body</label>
+                <input type="text" @bind="body"/>
+            </div>
+            <div class="button-row">
+                @if (!string.IsNullOrEmpty(message))
+                {
+                    <label style="color: red">@message</label>
+                }
+                <button @onclick="CreateAsync" class="acceptbtn">Create</button>
+            </div>
+        }
+    }
+    else
+    {
+        <label>Access Denied</label>
+    }
+</div>
+
+@code {
+    private IEnumerable<SubForm>? subForms;
+    private string? username;
+    private int? subFormId;
+    private string title = "";
+    private string body = "";
+    private string message = "";
+    private bool showModal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        showModal = false;
+        message = "";
+        try
+        {
+            username = userService.getUsername();
+            subForms = await subFormService.GetAsync(username, null);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            message = e.Message;
+        }
+    }
+    
+    private async Task CreateAsync()
+    {
+        message = "";
+
+        try
+        {
+            await postService.CreateAsync(new PostCreationDto((int)subFormId, title, body));
+            title = "";
+            body = "";
+            showModal = true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            message = e.Message;
+        }
+    }
+}

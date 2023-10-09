@@ -1,0 +1,21 @@
+###
+
+POST https://localhost:7122/Users/signin
+Content-Type: application/json
+
+{"Username" :  "OLIwier123456", "Password" :  "Password123"}
+
+###
+
+POST https://localhost:7122/Users/login
+Content-Type: application/json
+
+{"Username" :  "OLIwier123456", "Password" :  "Password123"}
+
+###
+
+DELETE https://localhost:7122/Users/OLIwier123456
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJhNmQwZjI4Yi03M2VmLTQ1NmEtYmRhZi03NDVhMTA2NzQ5ZWYiLCJpYXQiOiIwOS8xMC8yMDIzIDE5OjAwOjU1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6Ik9MSXdpZXIxMjM0NTYiLCJleHAiOjE2OTY4ODE2NTUsImlzcyI6IkpXVEF1dGhlbnRpY2F0aW9uU2VydmVyIiwiYXVkIjoiSldUU2VydmljZUJsYXpvcldhc21DbGllbnQifQ.MRgyzfCWUUaJbXuxelME3f7qTHG0MeT3CJWFJRi8C21Dw7LZGXVoFfky1V_Ac2pcYZYRis-047nqix0hWDroOg
+
+
+

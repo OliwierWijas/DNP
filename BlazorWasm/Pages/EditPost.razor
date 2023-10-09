@@ -1,0 +1,92 @@
+﻿@page "/EditPost/{id:int}"
+@using global::Shared.DTOs
+@using HttpClient.ClientInterfaces
+@inject IUserService userService
+@inject IPostService postService
+@inject NavigationManager navMgr
+
+<div class="card">
+    <h3>EditPost</h3>
+    @if (!string.IsNullOrEmpty(username))
+    {
+        @if (dto is null)
+        {
+            <span>Loading post...</span>
+        }
+        else
+        {
+            <div class="form-group field">
+                <label>Id:</label>
+                <input type="text" @bind="Id" readonly/>
+            </div>
+            <div class="form-group field">
+                <label>New title:</label>
+                <input type="text" @bind="dto.Title" @bind:event="oninput"/>
+            </div>
+            <div class="form-group field">
+                <label>New body:</label>
+                <input type="text" @bind="dto.Body" @bind:event="oninput"/>
+            </div>
+            <div class="button-row">
+                <button @onclick="UpdateAsync" class="acceptbtn">Edit</button>
+            </div>
+        }
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <label style="color: red">@message</label>
+        }
+    }
+    else
+    {
+        <label>Access Denied</label>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private string? username;
+    private PostUpdateDto dto = null!;
+    private int subFormId;
+    private string title;
+    private string body;
+    private string message;
+
+    protected override async Task OnInitializedAsync()
+    {
+        message = "";
+        try
+        {
+            username = userService.getUsername();
+            PostBasicDto dtoData = await postService.GetByIdAsync(Id);
+            subFormId = dtoData.SubFormId;
+            title = dtoData.Title;
+            body = dtoData.Body;
+            dto = new(Id)
+            {
+                Title = title,
+                Body = body
+            };
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            message = e.Message;
+        }
+    }
+
+    private async Task UpdateAsync()
+    {
+        try
+        {
+            await postService.UpdateAsync(dto);
+            navMgr.NavigateTo($"/ManagePosts?subformid={subFormId}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            message = e.Message;
+        }
+    }
+}

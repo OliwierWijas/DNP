@@ -1,0 +1,63 @@
+﻿@page "/CreateSubForm"
+@using HttpClient.ClientInterfaces
+@using global::Shared.DTOs
+@inject ISubFormService subFormService
+@inject IUserService userService
+@inject NavigationManager navMgr
+@using UIComponents
+
+<div class="card">
+    <h3>Create Sub Form</h3>
+    <Modal ShowModal="showModal">
+        <p>A new sub form has been successfully created.</p>
+        <button @onclick="@(() => { showModal = false; navMgr.NavigateTo($"/ViewSubForms?username={username}");})">Continue</button>
+    </Modal>
+    @if (!string.IsNullOrEmpty(username))
+    {
+        <div class=form-group-field>
+            <label>Sub Form name:</label>
+            <input type="text" @bind=name @bind:event="oninput"/>
+            @if (!string.IsNullOrEmpty(message))
+            {
+                <label style="color: red">@message</label>
+            }
+        </div>
+        <div class="button-row">
+            <button @onclick="Create" disabled="@(string.IsNullOrEmpty(name))" class="acceptbtn">Create</button>
+        </div>
+    }
+    else
+    {
+        <label>Access denied</label>
+    }
+</div>
+
+@code {
+    private string? username = "";
+    private string name = "";
+    private string message = "";
+    private bool showModal = false;
+
+
+    protected override void OnInitialized()
+    {
+        username = userService.getUsername();
+    }
+    
+    private async Task Create()
+    {
+        message = "";
+
+        try
+        {
+            await subFormService.CreateAsync(new SubFormBasicDto(username, name));
+            name = "";
+            showModal = true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            message = e.Message;
+        }
+    }
+}

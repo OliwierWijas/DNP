@@ -1,0 +1,17 @@
+C:\Users\oliwi\RiderProjects\Assignment\FileData\bin\Debug\net7.0\FileData.deps.json
+C:\Users\oliwi\RiderProjects\Assignment\FileData\bin\Debug\net7.0\FileData.dll
+C:\Users\oliwi\RiderProjects\Assignment\FileData\bin\Debug\net7.0\FileData.pdb
+C:\Users\oliwi\RiderProjects\Assignment\FileData\bin\Debug\net7.0\Application.dll
+C:\Users\oliwi\RiderProjects\Assignment\FileData\bin\Debug\net7.0\Shared.dll
+C:\Users\oliwi\RiderProjects\Assignment\FileData\bin\Debug\net7.0\Application.pdb
+C:\Users\oliwi\RiderProjects\Assignment\FileData\bin\Debug\net7.0\Shared.pdb
+C:\Users\oliwi\RiderProjects\Assignment\FileData\obj\Debug\net7.0\FileData.csproj.AssemblyReference.cache
+C:\Users\oliwi\RiderProjects\Assignment\FileData\obj\Debug\net7.0\FileData.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\oliwi\RiderProjects\Assignment\FileData\obj\Debug\net7.0\FileData.AssemblyInfoInputs.cache
+C:\Users\oliwi\RiderProjects\Assignment\FileData\obj\Debug\net7.0\FileData.AssemblyInfo.cs
+C:\Users\oliwi\RiderProjects\Assignment\FileData\obj\Debug\net7.0\FileData.csproj.CoreCompileInputs.cache
+C:\Users\oliwi\RiderProjects\Assignment\FileData\obj\Debug\net7.0\FileData.csproj.CopyComplete
+C:\Users\oliwi\RiderProjects\Assignment\FileData\obj\Debug\net7.0\FileData.dll
+C:\Users\oliwi\RiderProjects\Assignment\FileData\obj\Debug\net7.0\refint\FileData.dll
+C:\Users\oliwi\RiderProjects\Assignment\FileData\obj\Debug\net7.0\FileData.pdb
+C:\Users\oliwi\RiderProjects\Assignment\FileData\obj\Debug\net7.0\ref\FileData.dll
