@@ -1,4 +1,5 @@
 ﻿@page "/CreatePost"
+@attribute [Authorize]
 @inject IPostService postService
 @inject ISubFormService subFormService
 @inject IUserService userService;
@@ -7,61 +8,65 @@
 @using global::Shared.DTOs
 @using global::Shared
 @using HttpClient.ClientInterfaces
+@using System.Security.Claims
 
-<div class="card">
-    <h3>Create Post</h3>
-    @if (!string.IsNullOrEmpty(username))
-    {
-        @if (subForms == null)
-        {
-            <label>Loading sub forms...</label>
-        }
-        else if (!subForms.Any())
-        {
-            <label>No sub forms in the system. Post cannot be created.</label>
-        }
-        else
-        {
-            <Modal ShowModal="showModal">
-                <p>A new post has been successfully created.</p>
-                <button @onclick="@(() => { showModal = false; navMgr.NavigateTo($"/ManagePosts?subformid={subFormId}");})">Continue</button>
-            </Modal>
-            <div class="form-group field">
-                <label>Sub Form</label>
-                <select @bind="subFormId">
-                    <option>Choose</option>
-                    @foreach (SubForm subForm in subForms)
+<AuthorizeView>
+    <Authorized>
+        <div class="card">
+            <h3>Create Post</h3>
+            @if (subForms == null)
+            {
+                <label>Loading sub forms...</label>
+            }
+            else if (!subForms.Any())
+            {
+                <label>No sub forms in the system. Post cannot be created.</label>
+            }
+            else
+            {
+                <Modal ShowModal="showModal">
+                    <p>A new post has been successfully created.</p>
+                    <button @onclick="@(() => { showModal = false; navMgr.NavigateTo($"/ManagePosts?subformid={subFormId}");})">Continue</button>
+                </Modal>
+                <div class="form-group field">
+                    <label>Sub Form</label>
+                    <select @bind="subFormId">
+                        <option>Choose</option>
+                        @foreach (SubForm subForm in subForms)
+                        {
+                            <option value="@subForm.Id">@subForm.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group field">
+                    <label>Title:</label>
+                    <input type="text" @bind="title"/>
+                </div>
+                <div class="form-group field">
+                    <label>body</label>
+                    <input type="text" @bind="body"/>
+                </div>
+                <div class="button-row">
+                    @if (!string.IsNullOrEmpty(message))
                     {
-                        <option value="@subForm.Id">@subForm.Name</option>
+                        <label style="color: red">@message</label>
                     }
-                </select>
-            </div>
-            <div class="form-group field">
-                <label>Title:</label>
-                <input type="text" @bind="title"/>
-            </div>
-            <div class="form-group field">
-                <label>body</label>
-                <input type="text" @bind="body"/>
-            </div>
-            <div class="button-row">
-                @if (!string.IsNullOrEmpty(message))
-                {
-                    <label style="color: red">@message</label>
-                }
-                <button @onclick="CreateAsync" class="acceptbtn">Create</button>
-            </div>
-        }
-    }
-    else
-    {
-        <label>Access Denied</label>
-    }
-</div>
+                    <button @onclick="CreateAsync" class="acceptbtn">Create</button>
+                </div>
+            }
+        </div>
+    </Authorized>
+</AuthorizeView>
 
 @code {
-    private IEnumerable<SubForm>? subForms;
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+
     private string? username;
+    private bool isLoggedIn;
+
+    private IEnumerable<SubForm>? subForms;
     private int? subFormId;
     private string title = "";
     private string body = "";
@@ -74,7 +79,14 @@
         message = "";
         try
         {
-            username = userService.getUsername();
+            AuthenticationState authState = await AuthState;
+            ClaimsPrincipal user = authState.User;
+            isLoggedIn = user.Identity is not null;
+
+            if (!isLoggedIn) return;
+
+            IEnumerable<Claim> userclaims = user.Claims.AsEnumerable();
+            username = userclaims.FirstOrDefault(c => c.Type.Equals("Username"))!.Value;
             subForms = await subFormService.GetAsync(username, null);
         }
         catch (Exception e)
@@ -83,7 +95,7 @@
             message = e.Message;
         }
     }
-    
+
     private async Task CreateAsync()
     {
         message = "";
@@ -101,4 +113,5 @@
             message = e.Message;
         }
     }
+
 }

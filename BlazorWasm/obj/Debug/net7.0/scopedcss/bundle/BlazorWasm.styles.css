@@ -1,0 +1,262 @@
+/* _content/BlazorWasm/Pages/ManagePosts.razor.rz.scp.css */
+.filter-bar[b-bl82ak0h6p] {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 5px;
+    display: inline-block;
+    margin: 10px;
+}
+
+.funnel[b-bl82ak0h6p] {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.filter[b-bl82ak0h6p] {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
+}
+/* _content/BlazorWasm/Pages/RegisterUser.razor.rz.scp.css */
+.card[b-rz80pbxoin] {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 250px;
+    padding: 25px;
+    text-align: center;
+    margin: auto;
+    margin-top: 50px;
+    border-radius: 15px;
+}
+
+.field[b-rz80pbxoin] {
+    margin-top: 20px;
+}
+
+.acceptbtn[b-rz80pbxoin] {
+    background-color:lightgreen;
+    border-radius: 5px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.button-row[b-rz80pbxoin]{
+    margin-top: 15px;
+}
+/* _content/BlazorWasm/Pages/UIComponents/LoginButtons.razor.rz.scp.css */
+.icon[b-49ysidaq5f] {
+    width: 30px;
+    cursor: pointer;
+}
+/* _content/BlazorWasm/Pages/UIComponents/Modal.razor.rz.scp.css */
+.modal-background[b-q2nkbeoziv] {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.47);
+    display: block;
+}
+
+.modal-box[b-q2nkbeoziv] {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #000000;
+    width: 30%;
+    min-width: 300px;
+    border-radius: 25px;
+    box-shadow: 0 5px 30px 15px #3f3f3f;
+}
+/* _content/BlazorWasm/Pages/ViewPosts.razor.rz.scp.css */
+.filter-bar[b-agzgme1hb0] {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 5px;
+    display: inline-block;
+    margin: 10px;
+}
+
+.funnel[b-agzgme1hb0] {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.filter[b-agzgme1hb0] {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
+}
+/* _content/BlazorWasm/Pages/ViewSubForms.razor.rz.scp.css */
+.filter-bar[b-9iebrxpt77] {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 5px;
+    display: inline-block;
+    margin: 10px;
+}
+
+.funnel[b-9iebrxpt77] {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.filter[b-9iebrxpt77] {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
+}
+/* _content/BlazorWasm/Shared/MainLayout.razor.rz.scp.css */
+.page[b-2ar46ifnr2] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+main[b-2ar46ifnr2] {
+    flex: 1;
+}
+
+.sidebar[b-2ar46ifnr2] {
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+}
+
+.top-row[b-2ar46ifnr2] {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #d6d5d5;
+    justify-content: flex-end;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+    .top-row[b-2ar46ifnr2]  a, .top-row .btn-link[b-2ar46ifnr2] {
+        white-space: nowrap;
+        margin-left: 1.5rem;
+    }
+
+    .top-row a:first-child[b-2ar46ifnr2] {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+@media (max-width: 640.98px) {
+    .top-row:not(.auth)[b-2ar46ifnr2] {
+        display: none;
+    }
+
+    .top-row.auth[b-2ar46ifnr2] {
+        justify-content: space-between;
+    }
+
+    .top-row a[b-2ar46ifnr2], .top-row .btn-link[b-2ar46ifnr2] {
+        margin-left: 0;
+    }
+}
+
+@media (min-width: 641px) {
+    .page[b-2ar46ifnr2] {
+        flex-direction: row;
+    }
+
+    .sidebar[b-2ar46ifnr2] {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    .top-row[b-2ar46ifnr2] {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .top-row[b-2ar46ifnr2], article[b-2ar46ifnr2] {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+}
+/* _content/BlazorWasm/Shared/NavMenu.razor.rz.scp.css */
+.navbar-toggler[b-oede2f5y32] {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.top-row[b-oede2f5y32] {
+    height: 3.5rem;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.navbar-brand[b-oede2f5y32] {
+    font-size: 1.1rem;
+}
+
+.oi[b-oede2f5y32] {
+    width: 2rem;
+    font-size: 1.1rem;
+    vertical-align: text-top;
+    top: -2px;
+}
+
+.nav-item[b-oede2f5y32] {
+    font-size: 0.9rem;
+    padding-bottom: 0.5rem;
+}
+
+    .nav-item:first-of-type[b-oede2f5y32] {
+        padding-top: 1rem;
+    }
+
+    .nav-item:last-of-type[b-oede2f5y32] {
+        padding-bottom: 1rem;
+    }
+
+    .nav-item[b-oede2f5y32]  a {
+        color: #d7d7d7;
+        border-radius: 4px;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        line-height: 3rem;
+    }
+
+.nav-item[b-oede2f5y32]  a.active {
+    background-color: rgba(255,255,255,0.25);
+    color: white;
+}
+
+.nav-item[b-oede2f5y32]  a:hover {
+    background-color: rgba(255,255,255,0.1);
+    color: white;
+}
+
+@media (min-width: 641px) {
+    .navbar-toggler[b-oede2f5y32] {
+        display: none;
+    }
+
+    .collapse[b-oede2f5y32] {
+        /* Never collapse the sidebar for wide screens */
+        display: block;
+    }
+    
+    .nav-scrollable[b-oede2f5y32] {
+        /* Allow sidebar to scroll for tall menus */
+        height: calc(100vh - 3.5rem);
+        overflow-y: auto;
+    }
+}

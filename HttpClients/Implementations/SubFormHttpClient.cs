@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using HttpClient.ClientInterfaces;
@@ -18,6 +19,7 @@ public class SubFormHttpClient : ISubFormService
 
     public async Task CreateAsync(SubFormBasicDto dto)
     {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserHttpClient.Jwt);
         HttpResponseMessage response = await client.PostAsJsonAsync("/subForms", dto);
         if (!response.IsSuccessStatusCode)
         {
@@ -28,6 +30,7 @@ public class SubFormHttpClient : ISubFormService
 
     public async Task<ICollection<SubForm>> GetAsync(string username, string? name)
     {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserHttpClient.Jwt);
         string query = $"?username={username}&name={name}";
 
         HttpResponseMessage response = await client.GetAsync("/subforms" + query);
@@ -43,6 +46,7 @@ public class SubFormHttpClient : ISubFormService
 
     public async Task<SubFormBasicDto> GetByIdAsync(int id)
     {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserHttpClient.Jwt);
         HttpResponseMessage response = await client.GetAsync($"/subforms/{id}");
         string content = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
@@ -55,6 +59,7 @@ public class SubFormHttpClient : ISubFormService
 
     public async Task UpdateAsync(SubFormUpdateDto dto)
     {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserHttpClient.Jwt);
         string json = JsonSerializer.Serialize(dto);
         StringContent body = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -68,6 +73,7 @@ public class SubFormHttpClient : ISubFormService
 
     public async Task DeleteAsync(int id)
     {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserHttpClient.Jwt);
         HttpResponseMessage response = await client.DeleteAsync($"/subforms/{id}");
         if (!response.IsSuccessStatusCode)
         {

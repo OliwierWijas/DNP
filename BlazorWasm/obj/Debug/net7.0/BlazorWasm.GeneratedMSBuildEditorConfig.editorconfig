@@ -60,6 +60,10 @@ build_metadata.AdditionalFiles.CssScope = b-bl82ak0h6p
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0ZXJVc2VyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = b-rz80pbxoin
 
+[C:/Users/oliwi/RiderProjects/Assignment/BlazorWasm/Pages/UIComponents/LoginButtons.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVUlDb21wb25lbnRzXExvZ2luQnV0dG9ucy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-49ysidaq5f
+
 [C:/Users/oliwi/RiderProjects/Assignment/BlazorWasm/Pages/UIComponents/Modal.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVUlDb21wb25lbnRzXE1vZGFsLnJhem9y
 build_metadata.AdditionalFiles.CssScope = b-q2nkbeoziv

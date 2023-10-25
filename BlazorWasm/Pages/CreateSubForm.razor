@@ -1,49 +1,60 @@
 ﻿@page "/CreateSubForm"
+@attribute [Authorize]
 @using HttpClient.ClientInterfaces
 @using global::Shared.DTOs
 @inject ISubFormService subFormService
 @inject IUserService userService
 @inject NavigationManager navMgr
 @using UIComponents
+@using System.Security.Claims
 
-<div class="card">
-    <h3>Create Sub Form</h3>
-    <Modal ShowModal="showModal">
-        <p>A new sub form has been successfully created.</p>
-        <button @onclick="@(() => { showModal = false; navMgr.NavigateTo($"/ViewSubForms?username={username}");})">Continue</button>
-    </Modal>
-    @if (!string.IsNullOrEmpty(username))
-    {
-        <div class=form-group-field>
-            <label>Sub Form name:</label>
-            <input type="text" @bind=name @bind:event="oninput"/>
-            @if (!string.IsNullOrEmpty(message))
-            {
-                <label style="color: red">@message</label>
-            }
+<AuthorizeView>
+    <Authorized>
+        <div class="card">
+            <h3>Create Sub Form</h3>
+            <Modal ShowModal="showModal">
+                <p>A new sub form has been successfully created.</p>
+                <button @onclick="@(() => { showModal = false; navMgr.NavigateTo($"/ViewSubForms?username={username}");})">Continue</button>
+            </Modal>
+            <div class=form-group-field>
+                <label>Sub Form name:</label>
+                <input type="text" @bind=name @bind:event="oninput"/>
+                @if (!string.IsNullOrEmpty(message))
+                {
+                    <label style="color: red">@message</label>
+                }
+            </div>
+            <div class="button-row">
+                <button @onclick="Create" disabled="@(string.IsNullOrEmpty(name))" class="acceptbtn">Create</button>
+            </div>
         </div>
-        <div class="button-row">
-            <button @onclick="Create" disabled="@(string.IsNullOrEmpty(name))" class="acceptbtn">Create</button>
-        </div>
-    }
-    else
-    {
-        <label>Access denied</label>
-    }
-</div>
+    </Authorized>
+</AuthorizeView>
 
 @code {
-    private string? username = "";
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+
+    private string? username;
+    private bool isLoggedIn;
+
     private string name = "";
     private string message = "";
     private bool showModal = false;
 
-
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        username = userService.getUsername();
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
+        isLoggedIn = user.Identity is not null;
+        
+        if (!isLoggedIn) return;
+
+        IEnumerable<Claim> userclaims = user.Claims.AsEnumerable();
+        username = userclaims.FirstOrDefault(c => c.Type.Equals("Username"))!.Value;
     }
-    
+
     private async Task Create()
     {
         message = "";
@@ -60,4 +71,5 @@
             message = e.Message;
         }
     }
+
 }

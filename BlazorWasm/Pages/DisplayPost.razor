@@ -3,47 +3,41 @@
 @using global::Shared.DTOs
 @using HttpClient.ClientInterfaces
 @using UIComponents
+@using System.Security.Claims
 @inject IUserService userService
 @inject IPostService postService
 @inject ICommentService commentService
 
 <div class="card">
     <h3>Display Post</h3>
-    @if (!string.IsNullOrEmpty(username))
+    @if (dto is null)
     {
-        @if (dto is null || comments is null)
-        {
-            <label>Loading...</label>
-        }
-        else
-        {
-            <Modal ShowModal="showModal">
-                <p>A comment has been added.</p>
-                <button @onclick="@(() => showModal = false)">Continue</button>
-            </Modal>
-            <div class="form-group field">
-                <label>Post</label>
-            </div>
-            <div class="form-group field">
-                <label>Title:</label>
-                <input type="text" @bind="@dto.Title" readonly/>
-            </div>
-            <div class="form-group field">
-                <label>Body:</label>
-                <input type="text" @bind="@dto.Body" readonly/>
-            </div>
-            @if (!string.IsNullOrEmpty(message))
-            {
-                <label style="color: red">@message</label>
-            }
-        }
+        <label>Loading...</label>
     }
     else
     {
-        <label>Access Denied</label>
+        <Modal ShowModal="showModal">
+            <p>A comment has been added.</p>
+            <button @onclick="@(() => showModal = false)">Continue</button>
+        </Modal>
+        <div class="form-group field">
+            <label>Post</label>
+        </div>
+        <div class="form-group field">
+            <label>Title:</label>
+            <input type="text" @bind="@dto.Title" readonly/>
+        </div>
+        <div class="form-group field">
+            <label>Body:</label>
+            <input type="text" @bind="@dto.Body" readonly/>
+        </div>
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <label style="color: red">@message</label>
+        }
     }
 </div>
-@if (!string.IsNullOrEmpty(username) && dto is not null && comments is not null)
+@if (comments is not null)
 {
     <table class="table">
         <thead>
@@ -51,15 +45,18 @@
             <th>Username</th>
             <th>Comment</th>
         </tr>
-        <tr>
-            <th>@username</th>
-            <th>
-                <input type="text" @bind="text" @bind:event="oninput"/>
-            </th>
-            <th>
-                <button @onclick="WriteCommentAsync" class="acceptbtn">Comment</button>
-            </th>
-        </tr>
+        @if (isLoggedIn)
+        {
+            <tr>
+                <th>@username</th>
+                <th>
+                    <input type="text" @bind="text" @bind:event="oninput"/>
+                </th>
+                <th>
+                    <button @onclick="WriteCommentAsync" class="acceptbtn">Comment</button>
+                </th>
+            </tr>
+        }
         </thead>
         <tbody>
         @foreach (Comment comment in comments)
@@ -70,7 +67,7 @@
             </tr>
         }
         </tbody>
-    </table>  
+    </table>
 }
 else
 {
@@ -83,8 +80,13 @@ else
     [SupplyParameterFromQuery(Name = "id")]
     public int Id { get; set; }
 
-    private PostBasicDto dto;
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+
     private string? username;
+    private bool isLoggedIn;
+
+    private PostBasicDto dto;
     private string text;
     private IEnumerable<Comment>? comments;
 
@@ -96,9 +98,18 @@ else
         message = "";
         try
         {
-            username = userService.getUsername();
             dto = await postService.GetByIdAsync(Id);
             comments = await commentService.GetAsync(Id);
+            
+            AuthenticationState authState = await AuthState;
+            ClaimsPrincipal user = authState.User;
+            isLoggedIn = user.Identity is not null;
+
+            if (isLoggedIn)
+            {
+                IEnumerable<Claim> userclaims = user.Claims.AsEnumerable();
+                username = userclaims.FirstOrDefault(c => c.Type.Equals("Username"))!.Value;
+            }
         }
         catch (Exception e)
         {
@@ -122,4 +133,5 @@ else
             message = e.Message;
         }
     }
+
 }

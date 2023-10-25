@@ -37,7 +37,6 @@ C:\Users\oliwi\RiderProjects\Assignment\WebAPI\bin\Debug\net7.0\Shared.dll
 C:\Users\oliwi\RiderProjects\Assignment\WebAPI\bin\Debug\net7.0\Application.pdb
 C:\Users\oliwi\RiderProjects\Assignment\WebAPI\bin\Debug\net7.0\FileData.pdb
 C:\Users\oliwi\RiderProjects\Assignment\WebAPI\bin\Debug\net7.0\Shared.pdb
-C:\Users\oliwi\RiderProjects\Assignment\WebAPI\bin\Debug\net7.0\data.json
 C:\Users\oliwi\RiderProjects\Assignment\WebAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\oliwi\RiderProjects\Assignment\WebAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Authorization.dll
 C:\Users\oliwi\RiderProjects\Assignment\WebAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Metadata.dll
@@ -49,3 +48,4 @@ C:\Users\oliwi\RiderProjects\Assignment\WebAPI\bin\Debug\net7.0\Microsoft.Identi
 C:\Users\oliwi\RiderProjects\Assignment\WebAPI\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\oliwi\RiderProjects\Assignment\WebAPI\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\oliwi\RiderProjects\Assignment\WebAPI\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\oliwi\RiderProjects\Assignment\WebAPI\bin\Debug\net7.0\data.json

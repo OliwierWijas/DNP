@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -16,7 +17,8 @@ public class UserHttpClient : IUserService
     
     public async Task LoginAsync(User user)
     {
-        HttpResponseMessage response = await client.PostAsJsonAsync("/users/login", user);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Jwt);
+        HttpResponseMessage response = await client.PostAsJsonAsync("https://localhost:7122/users/login", user);
         string responseContent = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
@@ -43,17 +45,27 @@ public class UserHttpClient : IUserService
 
     public async Task RegisterAsync(User user)
     {
-        HttpResponseMessage response = await client.PostAsJsonAsync("/users/signin", user);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Jwt);
+        HttpResponseMessage response = await client.PostAsJsonAsync("https://localhost:7122/users/signin", user);
         string responseContent = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
         {
             throw new Exception(responseContent);
-        }    }
+        }   
+        
+        string token = responseContent;
+        Jwt = token;
+
+        ClaimsPrincipal principal = CreateClaimsPrincipal();
+
+        OnAuthStateChanged.Invoke(principal);
+    }
 
     public Task<ClaimsPrincipal> GetAuthAsync()
     {
-        throw new NotImplementedException();
+        ClaimsPrincipal principal = CreateClaimsPrincipal();
+        return Task.FromResult(principal);
     }
 
     public Action<ClaimsPrincipal> OnAuthStateChanged { get; set; } = null!;

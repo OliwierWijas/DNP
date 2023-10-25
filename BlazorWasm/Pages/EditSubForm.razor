@@ -1,49 +1,54 @@
 ﻿@page "/EditSubForm/{id:int}"
+@attribute [Authorize]
 @using global::Shared.DTOs
 @using global::Shared
 @using HttpClient.ClientInterfaces
+@using System.Security.Claims
 @inject IUserService userService
 @inject ISubFormService subFormService
 @inject NavigationManager navMgr
 
-<div class="card">
-    <h3>EditSubForm</h3>
-    @if (!string.IsNullOrEmpty(username))
-    {
-        @if (dto is null)
-        {
-            <span>Loading sub form...</span>
-        }
-        else
-        {
-            <div class="form-group field">
-                <label>Id:</label>
-                <input type="text" @bind="Id" readonly/>
-            </div>
-            <div class="form-group field">
-                <label>New name:</label>
-                <input type="text" @bind="dto.Name" @bind:event="oninput"/>
-            </div>
-            <div class="button-row">
-                <button @onclick="UpdateAsync" class="acceptbtn">Edit</button>
-            </div>
-        }
-        @if (!string.IsNullOrEmpty(message))
-        {
-            <label style="color: red">@message</label>
-        }
-    }
-    else
-    {
-        <label>Access Denied</label>
-    }
-</div>
+<AuthorizeView>
+    <Authorized>
+        <div class="card">
+            <h3>EditSubForm</h3>
+            @if (dto is null)
+            {
+                <span>Loading sub form...</span>
+            }
+            else
+            {
+                <div class="form-group field">
+                    <label>Id:</label>
+                    <input type="text" @bind="Id" readonly/>
+                </div>
+                <div class="form-group field">
+                    <label>New name:</label>
+                    <input type="text" @bind="dto.Name" @bind:event="oninput"/>
+                </div>
+                <div class="button-row">
+                    <button @onclick="UpdateAsync" class="acceptbtn">Edit</button>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(message))
+            {
+                <label style="color: red">@message</label>
+            }
+        </div>
+    </Authorized>
+</AuthorizeView>
 
 @code {
+
     [Parameter]
     public int Id { get; set; }
 
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+
     private string? username;
+    private bool isLoggedIn;
+    
     private SubFormUpdateDto dto = null!;
     private string name;
     private string message;
@@ -53,7 +58,15 @@
         message = "";
         try
         {
-            username = userService.getUsername();
+            AuthenticationState authState = await AuthState;
+            ClaimsPrincipal user = authState.User;
+            isLoggedIn = user.Identity is not null;
+
+            if (!isLoggedIn) return;
+
+            IEnumerable<Claim> userclaims = user.Claims.AsEnumerable();
+            username = userclaims.FirstOrDefault(c => c.Type.Equals("Username"))!.Value;
+            
             SubFormBasicDto dtoData = await subFormService.GetByIdAsync(Id);
             name = dtoData.Name;
             dto = new(Id)
@@ -81,4 +94,5 @@
             message = e.Message;
         }
     }
+
 }

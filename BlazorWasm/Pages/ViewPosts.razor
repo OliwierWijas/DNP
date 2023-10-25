@@ -1,73 +1,75 @@
 ﻿@page "/ViewPosts"
 @using global::Shared
 @using HttpClient.ClientInterfaces
+@using System.Security.Claims
 @inject IUserService userService
 @inject IPostService postService
 @inject NavigationManager navMgr
 
+
 <div class="card" style="width: 100%">
     <h3>Display Posts</h3>
-    @if (!string.IsNullOrEmpty(username))
-    {
-        <div class="filter-bar">
-            <div class="filters-container">
-                <img src="icons/@(doShowFilters ? "clear_" : "")funnel.png" class="funnel" @onclick="@(() => { doShowFilters = !doShowFilters; titleFilter = "";})" alt="Funnel"/>
-                @if (doShowFilters)
-                {
-                    <div class="filter">
-                        <label>Title:</label>
-                        <input type="text" style="width: 120px" @bind="titleFilter"/>
-                    </div>
-                }
-            </div>
+    <div class="filter-bar">
+        <div class="filters-container">
+            <img src="icons/@(doShowFilters ? "clear_" : "")funnel.png" class="funnel" @onclick="@(() => { doShowFilters = !doShowFilters; titleFilter = "";})" alt="Funnel"/>
+            @if (doShowFilters)
+            {
+                <div class="filter">
+                    <label>Title:</label>
+                    <input type="text" style="width: 120px" @bind="titleFilter"/>
+                </div>
+            }
         </div>
-        <button @onclick="LoadPosts">Load</button>
+    </div>
+    <button @onclick="LoadPosts">Load</button>
 
-        @if (posts == null)
-        {
-            <span>Loading...</span>
-        }
-        else if (!posts.Any())
-        {
-            <span>No posts to be found.</span>
-        }
-        else
-        {
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Body</th>
-                    <th>Enter</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (Post post in posts)
-                {
-                    <tr>
-                        <td>@post.Title</td>
-                        <td>@post.Body</td>
-                        <td>
-                            <label @onclick="@(() => navMgr.NavigateTo($"/DisplayPost?id={post.Id}"))" style="cursor: pointer">Display</label>
-                        </td>                        
-                    </tr>
-                }
-                </tbody>
-            </table>
-        }
-        @if (!string.IsNullOrEmpty(message))
-        {
-            <label style="color: red">@message</label>
-        }
+    @if (posts == null)
+    {
+        <span>Loading...</span>
+    }
+    else if (!posts.Any())
+    {
+        <span>No posts to be found.</span>
     }
     else
     {
-        <label>Access denied</label>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Body</th>
+                <th>Enter</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (Post post in posts)
+            {
+                <tr>
+                    <td>@post.Title</td>
+                    <td>@post.Body</td>
+                    <td>
+                        <label @onclick="@(() => navMgr.NavigateTo($"/DisplayPost?id={post.Id}"))" style="cursor: pointer">Display</label>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <label style="color: red">@message</label>
     }
 </div>
 
+
 @code {
-    private string username;
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+
+    private string? username;
+    private bool isLoggedIn;
+
     private IEnumerable<Post>? posts;
     private string message = "";
     private bool doShowFilters = false;
@@ -75,7 +77,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        username = userService.getUsername();
+        titleFilter = "";
         await LoadPosts();
     }
 
@@ -91,4 +93,5 @@
             message = e.Message;
         }
     }
+
 }

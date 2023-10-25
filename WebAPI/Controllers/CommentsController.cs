@@ -33,7 +33,7 @@ public class CommentsController : ControllerBase
         }
     }
     
-    [HttpGet("{id:int}")]
+    /*[HttpGet("{id:int}")]
     public async Task<ActionResult<CommentCreationDto>> GetById([FromRoute] int id)
     {
         try
@@ -46,14 +46,14 @@ public class CommentsController : ControllerBase
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
         }
-    }
+    }*/
     
-    [HttpGet]
+    [HttpGet, AllowAnonymous]
     public async Task<ActionResult<Comment>> GetAsync([FromQuery] int? postId, [FromQuery] string? username)
     {
         try
         {
-            CommentSearchDto parameters = new CommentSearchDto(postId, username);
+            CommentSearchDto parameters = new CommentSearchDto(postId, null);
             var result = await commentLogic.GetAsync(parameters);
             return Ok(result);
         }

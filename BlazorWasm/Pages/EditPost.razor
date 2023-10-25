@@ -1,52 +1,57 @@
 ﻿@page "/EditPost/{id:int}"
+@attribute [Authorize]
 @using global::Shared.DTOs
 @using HttpClient.ClientInterfaces
+@using System.Security.Claims
 @inject IUserService userService
 @inject IPostService postService
 @inject NavigationManager navMgr
 
-<div class="card">
-    <h3>EditPost</h3>
-    @if (!string.IsNullOrEmpty(username))
-    {
-        @if (dto is null)
-        {
-            <span>Loading post...</span>
-        }
-        else
-        {
-            <div class="form-group field">
-                <label>Id:</label>
-                <input type="text" @bind="Id" readonly/>
-            </div>
-            <div class="form-group field">
-                <label>New title:</label>
-                <input type="text" @bind="dto.Title" @bind:event="oninput"/>
-            </div>
-            <div class="form-group field">
-                <label>New body:</label>
-                <input type="text" @bind="dto.Body" @bind:event="oninput"/>
-            </div>
-            <div class="button-row">
-                <button @onclick="UpdateAsync" class="acceptbtn">Edit</button>
-            </div>
-        }
-        @if (!string.IsNullOrEmpty(message))
-        {
-            <label style="color: red">@message</label>
-        }
-    }
-    else
-    {
-        <label>Access Denied</label>
-    }
-</div>
+<AuthorizeView>
+    <Authorized>
+        <div class="card">
+            <h3>EditPost</h3>
+            @if (dto is null)
+            {
+                <span>Loading post...</span>
+            }
+            else
+            {
+                <div class="form-group field">
+                    <label>Id:</label>
+                    <input type="text" @bind="Id" readonly/>
+                </div>
+                <div class="form-group field">
+                    <label>New title:</label>
+                    <input type="text" @bind="dto.Title" @bind:event="oninput"/>
+                </div>
+                <div class="form-group field">
+                    <label>New body:</label>
+                    <input type="text" @bind="dto.Body" @bind:event="oninput"/>
+                </div>
+                <div class="button-row">
+                    <button @onclick="UpdateAsync" class="acceptbtn">Edit</button>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(message))
+            {
+                <label style="color: red">@message</label>
+            }
+        </div>
+    </Authorized>
+</AuthorizeView>
 
 @code {
+
     [Parameter]
     public int Id { get; set; }
 
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+
     private string? username;
+    private bool isLoggedIn;
+    
     private PostUpdateDto dto = null!;
     private int subFormId;
     private string title;
@@ -58,7 +63,15 @@
         message = "";
         try
         {
-            username = userService.getUsername();
+            AuthenticationState authState = await AuthState;
+            ClaimsPrincipal user = authState.User;
+            isLoggedIn = user.Identity is not null;
+
+            if (!isLoggedIn) return;
+
+            IEnumerable<Claim> userclaims = user.Claims.AsEnumerable();
+            username = userclaims.FirstOrDefault(c => c.Type.Equals("Username"))!.Value;
+            
             PostBasicDto dtoData = await postService.GetByIdAsync(Id);
             subFormId = dtoData.SubFormId;
             title = dtoData.Title;
@@ -89,4 +102,5 @@
             message = e.Message;
         }
     }
+
 }

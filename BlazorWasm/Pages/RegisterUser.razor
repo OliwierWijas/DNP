@@ -3,39 +3,70 @@
 @using global::Shared
 @inject IUserService userService
 
-<div class="card">
-    <h3>RegisterUser</h3>
-    <div class = form-group-field>
-        <label>Username:</label>
-        <input type="text" @bind=username @bind:event="oninput"/>
-        <label>Password:</label>
-        <input type="text" @bind="password" @bind:event="oninput"/>
-        @if (!string.IsNullOrEmpty(message))
-        {
-            <label style="color: @color">@message</label>
-        }
-    </div>
-    <div class="button-row">
-        <button @onclick="Register" disabled="@(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))" class="acceptbtn">Register</button>
-    </div>
-</div>
+<AuthorizeView>
+    <NotAuthorized>
+        <div class="card">
+            <h3>RegisterUser</h3>
+            <div class=form-group-field>
+                <label>Username:</label>
+                <input type="text" @bind=username @bind:event="oninput"/>
+                <label>Password:</label>
+                <input type="password" @bind="password" @bind:event="oninput"/>
+                @if (!string.IsNullOrEmpty(message))
+                {
+                    <label style="color: @color">@message</label>
+                }
+            </div>
+            <div class="button-row">
+                <button @onclick="Register" disabled="@(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))" class="acceptbtn">Register</button>
+            </div>
+            <div class="button-row">
+                <button @onclick="Login" disabled="@(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))" class="acceptbtn">Login</button>
+            </div>
+        </div>
+    </NotAuthorized>
+    <Authorized>
+        <label>Hello @loggedInUsername</label>
+    </Authorized>
+</AuthorizeView>
 
 
 @code {
+    private string loggedInUsername = "";
     private string username = "";
     private string password = "";
     private string message = "";
     private string color = "";
-    
+
     private async Task Register()
     {
         message = "";
         try
         {
             await userService.RegisterAsync(new User(username, password));
+            loggedInUsername = username;
             username = "";
             password = "";
             message = "Registered successfully";
+            color = "green";
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            message = e.Message;
+            color = "red";
+        }
+    }
+
+    private async Task Login()
+    {
+        try
+        {
+            await userService.LoginAsync(new User(username, password));
+            loggedInUsername = username;
+            username = "";
+            password = "";
+            message = "Logged in successfully";
             color = "green";
         }
         catch (Exception e)

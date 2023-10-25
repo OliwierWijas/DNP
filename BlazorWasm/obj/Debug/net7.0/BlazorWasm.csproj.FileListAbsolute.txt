@@ -40,3 +40,10 @@ C:\Users\oliwi\RiderProjects\Assignment\BlazorWasm\obj\Debug\net7.0\scopedcss\Pa
 C:\Users\oliwi\RiderProjects\Assignment\BlazorWasm\obj\Debug\net7.0\scopedcss\Pages\ViewSubForms.razor.rz.scp.css
 C:\Users\oliwi\RiderProjects\Assignment\BlazorWasm\obj\Debug\net7.0\scopedcss\Pages\ManagePosts.razor.rz.scp.css
 C:\Users\oliwi\RiderProjects\Assignment\BlazorWasm\obj\Debug\net7.0\scopedcss\Pages\ViewPosts.razor.rz.scp.css
+C:\Users\oliwi\RiderProjects\Assignment\BlazorWasm\bin\Debug\net7.0\Microsoft.AspNetCore.Authorization.dll
+C:\Users\oliwi\RiderProjects\Assignment\BlazorWasm\bin\Debug\net7.0\Microsoft.AspNetCore.Components.dll
+C:\Users\oliwi\RiderProjects\Assignment\BlazorWasm\bin\Debug\net7.0\Microsoft.AspNetCore.Components.Authorization.dll
+C:\Users\oliwi\RiderProjects\Assignment\BlazorWasm\bin\Debug\net7.0\Microsoft.AspNetCore.Metadata.dll
+C:\Users\oliwi\RiderProjects\Assignment\BlazorWasm\bin\Debug\net7.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\oliwi\RiderProjects\Assignment\BlazorWasm\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
+C:\Users\oliwi\RiderProjects\Assignment\BlazorWasm\obj\Debug\net7.0\scopedcss\Pages\UIComponents\LoginButtons.razor.rz.scp.css

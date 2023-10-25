@@ -1,4 +1,5 @@
 ﻿@page "/ManagePosts"
+@attribute [Authorize]
 @using global::Shared
 @using HttpClient.ClientInterfaces
 @using Microsoft.AspNetCore.Mvc
@@ -6,88 +7,91 @@
 @inject IUserService userService
 @inject NavigationManager navMgr
 @using UIComponents
+@using System.Security.Claims
 
-<div class="card" style="width: 100%">
-    <h3>Manage Posts</h3>
-    <Modal ShowModal="showModal">
-        <p>The post has been successfully deleted.</p>
-        <button @onclick="@(() => { showModal = false; })">Continue</button>
-    </Modal>
-    @if (!string.IsNullOrEmpty(username))
-    {
-        <div class="filter-bar">
-            <div class="filters-container">
-                <img src="icons/@(doShowFilters ? "clear_" : "")funnel.png" class="funnel" @onclick="@(() => { doShowFilters = !doShowFilters; titleFilter = "";})" alt="Funnel"/>
-                @if (doShowFilters)
-                {
-                    <div class="filter">
-                        <label>Title:</label>
-                        <input type="text" style="width: 120px" @bind="titleFilter"/>
-                    </div>
-                }
+<AuthorizeView>
+    <Authorized>
+        <div class="card" style="width: 100%">
+            <h3>Manage Posts</h3>
+            <Modal ShowModal="showModal">
+                <p>The post has been successfully deleted.</p>
+                <button @onclick="@(() => { showModal = false; })">Continue</button>
+            </Modal>
+            <div class="filter-bar">
+                <div class="filters-container">
+                    <img src="icons/@(doShowFilters ? "clear_" : "")funnel.png" class="funnel" @onclick="@(() => { doShowFilters = !doShowFilters; titleFilter = "";})" alt="Funnel"/>
+                    @if (doShowFilters)
+                    {
+                        <div class="filter">
+                            <label>Title:</label>
+                            <input type="text" style="width: 120px" @bind="titleFilter"/>
+                        </div>
+                    }
+                </div>
             </div>
-        </div>
-        <button @onclick="LoadPosts">Load</button>
+            <button @onclick="LoadPosts">Load</button>
 
-        @if (posts == null)
-        {
-            <span>Loading...</span>
-        }
-        else if (!posts.Any())
-        {
-            <span>No posts to be found.</span>
-        }
-        else
-        {
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Body</th>
-                    <th>Enter</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (Post post in posts)
-                {
+            @if (posts == null)
+            {
+                <span>Loading...</span>
+            }
+            else if (!posts.Any())
+            {
+                <span>No posts to be found.</span>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
                     <tr>
-                        <td>@post.Title</td>
-                        <td>@post.Body</td>
-                        <td>
-                            <label @onclick="@(() => navMgr.NavigateTo($"/DisplayPost?id={post.Id}"))" style="cursor: pointer">Display</label>
-                        </td>                        
-                        <td>
-                            <img src="icons/edit.gif" class="funnel" @onclick="@(() => navMgr.NavigateTo($"/EditPost/{post.Id}"))" style="cursor: pointer"/>
-                        </td>
-                        <td>
-                            <label @onclick="@(() => RemoveSubForm(post.Id))" style="cursor: pointer; color: red; font-weight: bold">
-                                &#x2717
-                            </label>
-                        </td>
+                        <th>Title</th>
+                        <th>Body</th>
+                        <th>Enter</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
-                }
-                </tbody>
-            </table>
-        }
-        @if (!string.IsNullOrEmpty(message))
-        {
-            <label style="color: red">@message</label>
-        }
-    }
-    else
-    {
-        <label>Access denied</label>
-    }
-</div>
+                    </thead>
+                    <tbody>
+                    @foreach (Post post in posts)
+                    {
+                        <tr>
+                            <td>@post.Title</td>
+                            <td>@post.Body</td>
+                            <td>
+                                <label @onclick="@(() => navMgr.NavigateTo($"/DisplayPost?id={post.Id}"))" style="cursor: pointer">Display</label>
+                            </td>
+                            <td>
+                                <img src="icons/edit.gif" class="funnel" @onclick="@(() => navMgr.NavigateTo($"/EditPost/{post.Id}"))" style="cursor: pointer"/>
+                            </td>
+                            <td>
+                                <label @onclick="@(() => RemoveSubForm(post.Id))" style="cursor: pointer; color: red; font-weight: bold">
+                                    &#x2717
+                                </label>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+            @if (!string.IsNullOrEmpty(message))
+            {
+                <label style="color: red">@message</label>
+            }
+        </div>
+    </Authorized>
+</AuthorizeView>
 
 @code {
-    private string username;
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+
+    private string? username;
+    private bool isLoggedIn;
+
     [Parameter]
     [SupplyParameterFromQuery(Name = "subformid")]
-    
     public int subFormId { get; set; }
+
     private IEnumerable<Post>? posts;
     private string message = "";
     private bool doShowFilters = false;
@@ -97,7 +101,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        username = userService.getUsername();
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
+        isLoggedIn = user.Identity is not null;
+
+        if (!isLoggedIn) return;
+
+        IEnumerable<Claim> userclaims = user.Claims.AsEnumerable();
+        username = userclaims.FirstOrDefault(c => c.Type.Equals("Username"))!.Value;
         await LoadPosts();
     }
 
@@ -105,7 +116,6 @@
     {
         try
         {
-            username = userService.getUsername();
             posts = await postService.GetAsync(subFormId, titleFilter);
         }
         catch (Exception e)
@@ -132,4 +142,5 @@
             message = e.Message;
         }
     }
+
 }

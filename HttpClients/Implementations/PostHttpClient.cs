@@ -1,7 +1,9 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using HttpClient.ClientInterfaces;
+using HttpClient.Implementations;
 using Shared;
 using Shared.DTOs;
 
@@ -18,6 +20,7 @@ public class PostHttpClient : IPostService
     
     public async Task CreateAsync(PostCreationDto dto)
     {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserHttpClient.Jwt);
         HttpResponseMessage response = await client.PostAsJsonAsync("/posts", dto);
         if (!response.IsSuccessStatusCode)
         {
@@ -28,6 +31,7 @@ public class PostHttpClient : IPostService
 
     public async Task<ICollection<Post>> GetAsync(int? subFormId, string? title)
     {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserHttpClient.Jwt);
         string query = "";
         if (subFormId is not null && subFormId != 0) 
             query += $"?subformid={subFormId}";
@@ -50,6 +54,7 @@ public class PostHttpClient : IPostService
 
     public async Task<PostBasicDto> GetByIdAsync(int id)
     {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserHttpClient.Jwt);
         HttpResponseMessage response = await client.GetAsync($"/posts/{id}");
         string content = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
@@ -62,6 +67,7 @@ public class PostHttpClient : IPostService
 
     public async Task UpdateAsync(PostUpdateDto dto)
     {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserHttpClient.Jwt);
         string json = JsonSerializer.Serialize(dto);
         StringContent body = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -75,6 +81,7 @@ public class PostHttpClient : IPostService
 
     public async Task DeleteAsync(int id)
     {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserHttpClient.Jwt);
         HttpResponseMessage response = await client.DeleteAsync($"/posts/{id}");
         if (!response.IsSuccessStatusCode)
         {

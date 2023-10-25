@@ -1,10 +1,12 @@
 using BlazorWasm.Pages;
+using HttpClient.Auth;
 using HttpClient.ClientInterfaces;
 using HttpClient.Implementations;
 using HttpClients.Implementations;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
-//using BlazorWasm.Data;
+using Shared.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,9 @@ builder.Services.AddScoped<IUserService, UserHttpClient>();
 builder.Services.AddScoped<ISubFormService, SubFormHttpClient>();
 builder.Services.AddScoped<IPostService, PostHttpClient>();
 builder.Services.AddScoped<ICommentService, CommentHttpClient>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
+
+AuthorizationPolicies.AddPolicies(builder.Services);
 
 var app = builder.Build();
 
