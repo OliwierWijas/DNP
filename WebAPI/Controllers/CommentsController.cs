@@ -33,59 +33,13 @@ public class CommentsController : ControllerBase
         }
     }
     
-    /*[HttpGet("{id:int}")]
-    public async Task<ActionResult<CommentCreationDto>> GetById([FromRoute] int id)
-    {
-        try
-        {
-            CommentCreationDto result = await commentLogic.GetByIdAsync(id);
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
-    }*/
-    
     [HttpGet, AllowAnonymous]
-    public async Task<ActionResult<Comment>> GetAsync([FromQuery] int? postId, [FromQuery] string? username)
+    public async Task<ActionResult<Comment>> GetAsync([FromQuery] int postId)
     {
         try
         {
-            CommentSearchDto parameters = new CommentSearchDto(postId, null);
-            var result = await commentLogic.GetAsync(parameters);
+            var result = await commentLogic.GetAsync(postId);
             return Ok(result);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
-    }
-
-    [HttpPatch]
-    public async Task<ActionResult> UpdateAsync(CommentUpdateDto dto)
-    {
-        try
-        {
-            await commentLogic.UpdateAsync(dto);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
-    }
-
-    [HttpDelete("{id:int}")]
-    public async Task<ActionResult> DeleteAsync([FromRoute] int id)
-    {
-        try
-        {
-            await commentLogic.DeleteAsync(id);
-            return Ok();
         }
         catch (Exception e)
         {

@@ -16,7 +16,7 @@ public class PostLogic : IPostLogic
         this.subFormDao = subFormDao;
     }
     
-    public async Task<Post> CreateAsync(PostCreationDto dto)
+    public async Task<Post> CreateAsync(PostBasicDto dto)
     {
         SubForm? subForm = await subFormDao.GetByIdAsync(dto.SubFormId);
         if (subForm is null)

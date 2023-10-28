@@ -18,7 +18,7 @@ public class PostHttpClient : IPostService
         this.client = client;
     }
     
-    public async Task CreateAsync(PostCreationDto dto)
+    public async Task CreateAsync(PostBasicDto dto)
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserHttpClient.Jwt);
         HttpResponseMessage response = await client.PostAsJsonAsync("/posts", dto);

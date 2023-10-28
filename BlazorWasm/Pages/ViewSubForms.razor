@@ -5,7 +5,6 @@
 @using HttpClient.ClientInterfaces
 @using System.Security.Claims
 @inject NavigationManager navMgr
-@inject IUserService userService
 @inject ISubFormService subFormService
 
 <AuthorizeView>
@@ -28,7 +27,7 @@
                     }
                 </div>
             </div>
-            <button @onclick="LoadSubForms">Load</button>
+            <button @onclick="LoadSubFormsAsync">Load</button>
 
             @if (subForms == null)
             {
@@ -63,7 +62,7 @@
                                 <img src="icons/edit.gif" class="funnel" @onclick="@(() => navMgr.NavigateTo($"/EditSubForm/{subForm.Id}"))" style="cursor: pointer"/>
                             </td>
                             <td>
-                                <label @onclick="@(() => RemoveSubForm(subForm.Id))" style="cursor: pointer; color: red; font-weight: bold">
+                                <label @onclick="@(() => RemoveSubFormAsync(subForm.Id))" style="cursor: pointer; color: red; font-weight: bold">
                                     &#x2717
                                 </label>
                             </td>
@@ -86,8 +85,6 @@
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
     private string? username;
-    private bool isLoggedIn;
-    
     private IEnumerable<SubForm>? subForms;
     private string message = "";
     private bool doShowFilters = false;
@@ -99,16 +96,16 @@
     {
         AuthenticationState authState = await AuthState;
         ClaimsPrincipal user = authState.User;
-        isLoggedIn = user.Identity is not null;
+        bool isLoggedIn = user.Identity is not null;
 
         if (!isLoggedIn) return;
 
         IEnumerable<Claim> userclaims = user.Claims.AsEnumerable();
         username = userclaims.FirstOrDefault(c => c.Type.Equals("Username"))!.Value;
-        await LoadSubForms();
+        await LoadSubFormsAsync();
     }
 
-    private async Task LoadSubForms()
+    private async Task LoadSubFormsAsync()
     {
         try
         {
@@ -121,7 +118,7 @@
         }
     }
 
-    private async Task RemoveSubForm(int id)
+    private async Task RemoveSubFormAsync(int id)
     {
         message = "";
         try
@@ -138,5 +135,4 @@
             message = e.Message;
         }
     }
-
 }

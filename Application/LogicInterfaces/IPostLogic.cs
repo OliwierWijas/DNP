@@ -5,7 +5,7 @@ namespace Application.LogicInterfaces;
 
 public interface IPostLogic
 {
-    Task<Post> CreateAsync(PostCreationDto dto);
+    Task<Post> CreateAsync(PostBasicDto dto);
     Task<PostBasicDto> GetByIdAsync(int id);
     Task<IEnumerable<Post>> GetAsync(PostSearchDto parameters);
     Task UpdateAsync(PostUpdateDto dto);

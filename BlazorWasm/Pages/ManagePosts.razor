@@ -2,9 +2,7 @@
 @attribute [Authorize]
 @using global::Shared
 @using HttpClient.ClientInterfaces
-@using Microsoft.AspNetCore.Mvc
 @inject IPostService postService
-@inject IUserService userService
 @inject NavigationManager navMgr
 @using UIComponents
 @using System.Security.Claims
@@ -29,7 +27,7 @@
                     }
                 </div>
             </div>
-            <button @onclick="LoadPosts">Load</button>
+            <button @onclick="LoadPostsAsync">Load</button>
 
             @if (posts == null)
             {
@@ -64,7 +62,7 @@
                                 <img src="icons/edit.gif" class="funnel" @onclick="@(() => navMgr.NavigateTo($"/EditPost/{post.Id}"))" style="cursor: pointer"/>
                             </td>
                             <td>
-                                <label @onclick="@(() => RemoveSubForm(post.Id))" style="cursor: pointer; color: red; font-weight: bold">
+                                <label @onclick="@(() => RemovePostAsync(post.Id))" style="cursor: pointer; color: red; font-weight: bold">
                                     &#x2717
                                 </label>
                             </td>
@@ -85,13 +83,11 @@
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
-    private string? username;
-    private bool isLoggedIn;
-
     [Parameter]
     [SupplyParameterFromQuery(Name = "subformid")]
     public int subFormId { get; set; }
 
+    private string? username;
     private IEnumerable<Post>? posts;
     private string message = "";
     private bool doShowFilters = false;
@@ -103,16 +99,16 @@
     {
         AuthenticationState authState = await AuthState;
         ClaimsPrincipal user = authState.User;
-        isLoggedIn = user.Identity is not null;
+        bool isLoggedIn = user.Identity is not null;
 
         if (!isLoggedIn) return;
 
         IEnumerable<Claim> userclaims = user.Claims.AsEnumerable();
         username = userclaims.FirstOrDefault(c => c.Type.Equals("Username"))!.Value;
-        await LoadPosts();
+        await LoadPostsAsync();
     }
 
-    private async Task LoadPosts()
+    private async Task LoadPostsAsync()
     {
         try
         {
@@ -125,7 +121,7 @@
         }
     }
 
-    private async Task RemoveSubForm(int id)
+    private async Task RemovePostAsync(int id)
     {
         message = "";
         try

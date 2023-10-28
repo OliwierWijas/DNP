@@ -7,7 +7,7 @@ public interface IUserService
 {
     Task LoginAsync(User user);
     Task LogoutAsync();
-    public Task RegisterAsync(User user);
+    Task RegisterAsync(User user);
     Task<ClaimsPrincipal> GetAuthAsync();
     
     public Action<ClaimsPrincipal> OnAuthStateChanged { get; set; }

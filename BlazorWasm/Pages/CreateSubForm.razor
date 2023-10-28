@@ -3,7 +3,6 @@
 @using HttpClient.ClientInterfaces
 @using global::Shared.DTOs
 @inject ISubFormService subFormService
-@inject IUserService userService
 @inject NavigationManager navMgr
 @using UIComponents
 @using System.Security.Claims
@@ -25,7 +24,7 @@
                 }
             </div>
             <div class="button-row">
-                <button @onclick="Create" disabled="@(string.IsNullOrEmpty(name))" class="acceptbtn">Create</button>
+                <button @onclick="CreateAsync" disabled="@(string.IsNullOrEmpty(name))" class="acceptbtn">Create</button>
             </div>
         </div>
     </Authorized>
@@ -37,7 +36,6 @@
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
     private string? username;
-    private bool isLoggedIn;
 
     private string name = "";
     private string message = "";
@@ -47,7 +45,7 @@
     {
         AuthenticationState authState = await AuthState;
         ClaimsPrincipal user = authState.User;
-        isLoggedIn = user.Identity is not null;
+        bool isLoggedIn = user.Identity is not null;
         
         if (!isLoggedIn) return;
 
@@ -55,7 +53,7 @@
         username = userclaims.FirstOrDefault(c => c.Type.Equals("Username"))!.Value;
     }
 
-    private async Task Create()
+    private async Task CreateAsync()
     {
         message = "";
 

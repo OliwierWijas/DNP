@@ -33,42 +33,9 @@ public class CommentLogic : ICommentLogic
         return created;
     }
 
-    public async Task<CommentCreationDto> GetByIdAsync(int id)
+    public async Task<IEnumerable<Comment>> GetAsync(int postId)
     {
-        Comment? comment = await commentDao.GetByIdAsync(id);
-        if (comment is null)
-            throw new Exception($"Comment with id {id} was not found.");
-        return new CommentCreationDto(comment.Post.Id, comment.User.Username, comment.Text);
-    }
-
-    public async Task<IEnumerable<Comment>> GetAsync(CommentSearchDto parameters)
-    {
-        return await commentDao.GetAsync(parameters);
-    }
-
-    public async Task UpdateAsync(CommentUpdateDto dto)
-    {
-        Comment? existing = await commentDao.GetByIdAsync(dto.Id);
-        if (existing is null)
-            throw new Exception($"Comment with id {dto.Id} was not found.");
-        
-        ValidateComment(dto.Text);
-
-        Comment updated = new Comment(existing.Post, existing.User, dto.Text)
-        {
-            Id = existing.Id
-        };
-
-        await commentDao.UpdateAsync(updated);
-    }
-
-    public async Task DeleteAsync(int id)
-    {
-        Comment? existing = await commentDao.GetByIdAsync(id);
-        if (existing is null)
-            throw new Exception($"Comment with id {id} was not found.");
-
-        await commentDao.DeleteAsync(id);
+        return await commentDao.GetAsync(postId);
     }
 
     private static void ValidateComment(string? text)

@@ -3,7 +3,6 @@
 @using global::Shared.DTOs
 @using HttpClient.ClientInterfaces
 @using System.Security.Claims
-@inject IUserService userService
 @inject IPostService postService
 @inject NavigationManager navMgr
 
@@ -50,8 +49,6 @@
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
     private string? username;
-    private bool isLoggedIn;
-    
     private PostUpdateDto dto = null!;
     private int subFormId;
     private string title;
@@ -65,7 +62,7 @@
         {
             AuthenticationState authState = await AuthState;
             ClaimsPrincipal user = authState.User;
-            isLoggedIn = user.Identity is not null;
+            bool isLoggedIn = user.Identity is not null;
 
             if (!isLoggedIn) return;
 

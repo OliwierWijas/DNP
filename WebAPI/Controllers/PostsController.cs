@@ -19,7 +19,7 @@ public class PostsController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<Post>> CreateAsync(PostCreationDto dto)
+    public async Task<ActionResult<Post>> CreateAsync(PostBasicDto dto)
     {
         try
         {

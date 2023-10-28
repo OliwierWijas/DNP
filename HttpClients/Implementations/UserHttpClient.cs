@@ -1,7 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Claims;
-using System.Text;
 using System.Text.Json;
 using HttpClient.ClientInterfaces;
 using Shared;
@@ -10,10 +9,13 @@ namespace HttpClient.Implementations;
 
 public class UserHttpClient : IUserService
 {
-   private readonly System.Net.Http.HttpClient client = new ();
-
+    private readonly System.Net.Http.HttpClient client;
     public static string? Jwt { get; private set; } = "";
 
+    public UserHttpClient(System.Net.Http.HttpClient client)
+    {
+        this.client = client;
+    }
     
     public async Task LoginAsync(User user)
     {

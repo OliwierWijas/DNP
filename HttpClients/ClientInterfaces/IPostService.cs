@@ -5,7 +5,7 @@ namespace HttpClient.ClientInterfaces;
 
 public interface IPostService
 {
-    Task CreateAsync(PostCreationDto dto);
+    Task CreateAsync(PostBasicDto dto);
     Task<ICollection<Post>> GetAsync(int? subFormId, string? title);
     Task<PostBasicDto> GetByIdAsync(int id);
     Task UpdateAsync(PostUpdateDto dto);

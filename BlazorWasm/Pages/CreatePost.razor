@@ -2,7 +2,6 @@
 @attribute [Authorize]
 @inject IPostService postService
 @inject ISubFormService subFormService
-@inject IUserService userService;
 @inject NavigationManager navMgr
 @using UIComponents
 @using global::Shared.DTOs
@@ -64,7 +63,6 @@
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
     private string? username;
-    private bool isLoggedIn;
 
     private IEnumerable<SubForm>? subForms;
     private int? subFormId;
@@ -81,7 +79,7 @@
         {
             AuthenticationState authState = await AuthState;
             ClaimsPrincipal user = authState.User;
-            isLoggedIn = user.Identity is not null;
+            bool isLoggedIn = user.Identity is not null;
 
             if (!isLoggedIn) return;
 
@@ -102,7 +100,7 @@
 
         try
         {
-            await postService.CreateAsync(new PostCreationDto((int)subFormId, title, body));
+            await postService.CreateAsync(new PostBasicDto((int)subFormId, title, body));
             title = "";
             body = "";
             showModal = true;
@@ -113,5 +111,4 @@
             message = e.Message;
         }
     }
-
 }

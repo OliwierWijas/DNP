@@ -60,7 +60,7 @@ public class SubFormFileDao : ISubFormDao
             context.SubForms.FirstOrDefault(s => s.Id == updated.Id);
         if (existing is null)
             throw new Exception($"Sub form with id {updated.Id} does not exist.");
-
+        
         context.SubForms.Remove(existing);
         context.SubForms.Add(updated);
         context.SaveChanges();
@@ -74,6 +74,17 @@ public class SubFormFileDao : ISubFormDao
             throw new Exception($"Sub form with id {id} does not exist.");
 
         context.SubForms.Remove(existing);
+        context.SaveChanges();
+        
+        ICollection<Post> postsToRemove = context.Posts;
+        foreach (Post post in postsToRemove)
+        {
+            if (post.SubForm.Id != id)
+            {
+                postsToRemove.Remove(post);
+            }
+        }
+        context.Posts = context.Posts.Where(p => !postsToRemove.Contains(p)).ToList();
         context.SaveChanges();
         
         return Task.CompletedTask;

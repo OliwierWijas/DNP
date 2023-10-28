@@ -18,10 +18,10 @@
                 }
             </div>
             <div class="button-row">
-                <button @onclick="Register" disabled="@(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))" class="acceptbtn">Register</button>
+                <button @onclick="RegisterAsync" disabled="@(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))" class="acceptbtn">Register</button>
             </div>
             <div class="button-row">
-                <button @onclick="Login" disabled="@(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))" class="acceptbtn">Login</button>
+                <button @onclick="LoginAsync" disabled="@(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))" class="acceptbtn">Login</button>
             </div>
         </div>
     </NotAuthorized>
@@ -38,7 +38,7 @@
     private string message = "";
     private string color = "";
 
-    private async Task Register()
+    private async Task RegisterAsync()
     {
         message = "";
         try
@@ -58,7 +58,7 @@
         }
     }
 
-    private async Task Login()
+    private async Task LoginAsync()
     {
         try
         {

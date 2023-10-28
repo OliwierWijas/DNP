@@ -36,7 +36,7 @@ public class PostFileDao : IPostDao
             context.Posts.FirstOrDefault(p => p.Id == postId);
         return Task.FromResult(existing);    
     }
-    
+
     public Task<IEnumerable<Post>> GetAsync(PostSearchDto parameters)
     {
         IEnumerable<Post> posts = context.Posts.AsEnumerable();

@@ -33,6 +33,10 @@ public class FileContext
             LoadData();
             return dataContainer!.Posts;
         }
+        set
+        {
+            dataContainer!.Posts = value;
+        }
     }
     
     public ICollection<Comment> Comments

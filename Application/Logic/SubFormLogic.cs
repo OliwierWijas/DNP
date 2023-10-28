@@ -62,7 +62,7 @@ public class SubFormLogic : ISubFormLogic
         SubForm? existing = await subFormDao.GetByIdAsync(id);
         if (existing is null)
             throw new Exception($"Sub form with id {id} was not found.");
-
+        
         await subFormDao.DeleteAsync(id);
     }
 

@@ -1,10 +1,8 @@
 ﻿@page "/EditSubForm/{id:int}"
 @attribute [Authorize]
 @using global::Shared.DTOs
-@using global::Shared
 @using HttpClient.ClientInterfaces
 @using System.Security.Claims
-@inject IUserService userService
 @inject ISubFormService subFormService
 @inject NavigationManager navMgr
 
@@ -47,7 +45,6 @@
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
     private string? username;
-    private bool isLoggedIn;
     
     private SubFormUpdateDto dto = null!;
     private string name;
@@ -60,7 +57,7 @@
         {
             AuthenticationState authState = await AuthState;
             ClaimsPrincipal user = authState.User;
-            isLoggedIn = user.Identity is not null;
+            bool isLoggedIn = user.Identity is not null;
 
             if (!isLoggedIn) return;
 
@@ -94,5 +91,4 @@
             message = e.Message;
         }
     }
-
 }

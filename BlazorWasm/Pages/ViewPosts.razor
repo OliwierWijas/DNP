@@ -1,8 +1,6 @@
 ﻿@page "/ViewPosts"
 @using global::Shared
 @using HttpClient.ClientInterfaces
-@using System.Security.Claims
-@inject IUserService userService
 @inject IPostService postService
 @inject NavigationManager navMgr
 
@@ -21,7 +19,7 @@
             }
         </div>
     </div>
-    <button @onclick="LoadPosts">Load</button>
+    <button @onclick="LoadPostsAsync">Load</button>
 
     @if (posts == null)
     {
@@ -67,9 +65,6 @@
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
-    private string? username;
-    private bool isLoggedIn;
-
     private IEnumerable<Post>? posts;
     private string message = "";
     private bool doShowFilters = false;
@@ -78,10 +73,10 @@
     protected override async Task OnInitializedAsync()
     {
         titleFilter = "";
-        await LoadPosts();
+        await LoadPostsAsync();
     }
 
-    private async Task LoadPosts()
+    private async Task LoadPostsAsync()
     {
         try
         {
