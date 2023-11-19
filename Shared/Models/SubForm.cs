@@ -1,9 +1,13 @@
-﻿namespace Shared;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Shared;
 
 public class SubForm
 {
+    [Key]
     public int Id { get; set; }
-    public User User { get; }
+    public User User { get; set; }
     public string Name { get; set; }
 
     public SubForm(User user, string name)
@@ -11,4 +15,6 @@ public class SubForm
         this.User = user;
         this.Name = name;
     }
+    
+    private SubForm(){}
 }

@@ -1,11 +1,15 @@
-﻿namespace Shared;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Shared;
 
 public class Comment
 {
+    [Key]
     public int Id { get; set; }
-    public Post Post { get; }
-    public User User { get; }
-    public string Text { get; }
+    public Post Post { get; set; }
+    public User User { get; set; }
+    public string Text { get; set; }
 
     public Comment(Post post, User user, string text)
     {
@@ -13,4 +17,6 @@ public class Comment
         this.User = user;
         this.Text = text;
     }
+    
+    private Comment(){}
 }

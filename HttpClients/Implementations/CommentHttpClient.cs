@@ -19,6 +19,8 @@ public class CommentHttpClient : ICommentService
     public async Task CreateAsync(CommentCreationDto dto)
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserHttpClient.Jwt);
+        if (string.IsNullOrEmpty(dto.Text))
+            throw new Exception("Comment cannot be empty");
         HttpResponseMessage response = await client.PostAsJsonAsync("/comments", dto);
         if (!response.IsSuccessStatusCode)
         {

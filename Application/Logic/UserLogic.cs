@@ -37,29 +37,6 @@ public class UserLogic : IUserLogic
         return existing;
     }
 
-    public async Task UpdateAsync(UserUpdateDto dto)
-    {
-        User? existingUser = await userDao.GetByUsernameAsync(dto.Username);
-        if (existingUser is null)
-            throw new Exception("User does not exist.");
-        
-        ValidateUsername(dto.NewUsername);
-        ValidatePassword(dto.Password);
-
-        User updated = new User(dto.NewUsername, dto.Password);
-
-        await userDao.UpdateAsync(existingUser.Username, updated);
-    }
-
-    public async Task DeleteAsync(string username)
-    {
-        User? existing = await userDao.GetByUsernameAsync(username);
-        if (existing is null)
-            throw new Exception($"User with username {username} was not found.");
-
-        await userDao.DeleteAsync(username);
-    }
-
     private static void ValidateUsername(string? username)
     {
         if (string.IsNullOrEmpty(username))

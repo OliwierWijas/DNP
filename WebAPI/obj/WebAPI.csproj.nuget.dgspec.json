@@ -61,6 +61,79 @@
         }
       }
     },
+    "C:\\Users\\oliwi\\RiderProjects\\Assignment\\EfcDataAccess\\EfcDataAccess.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\oliwi\\RiderProjects\\Assignment\\EfcDataAccess\\EfcDataAccess.csproj",
+        "projectName": "EfcDataAccess",
+        "projectPath": "C:\\Users\\oliwi\\RiderProjects\\Assignment\\EfcDataAccess\\EfcDataAccess.csproj",
+        "packagesPath": "C:\\Users\\oliwi\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\oliwi\\RiderProjects\\Assignment\\EfcDataAccess\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\oliwi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "C:\\Users\\oliwi\\RiderProjects\\Assignment\\Application\\Application.csproj": {
+                "projectPath": "C:\\Users\\oliwi\\RiderProjects\\Assignment\\Application\\Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.13, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.13, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[7.0.13, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "C:\\Users\\oliwi\\RiderProjects\\Assignment\\FileData\\FileData.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -201,6 +274,9 @@
             "projectReferences": {
               "C:\\Users\\oliwi\\RiderProjects\\Assignment\\Application\\Application.csproj": {
                 "projectPath": "C:\\Users\\oliwi\\RiderProjects\\Assignment\\Application\\Application.csproj"
+              },
+              "C:\\Users\\oliwi\\RiderProjects\\Assignment\\EfcDataAccess\\EfcDataAccess.csproj": {
+                "projectPath": "C:\\Users\\oliwi\\RiderProjects\\Assignment\\EfcDataAccess\\EfcDataAccess.csproj"
               },
               "C:\\Users\\oliwi\\RiderProjects\\Assignment\\FileData\\FileData.csproj": {
                 "projectPath": "C:\\Users\\oliwi\\RiderProjects\\Assignment\\FileData\\FileData.csproj"

@@ -61,7 +61,14 @@
         @foreach (Comment comment in comments)
         {
             <tr>
-                <td>@comment.User.Username</td>
+                @if (comment.User is not null)
+                {
+                    <td>@comment.User.Username</td>
+                }
+                else
+                {
+                    <td>No username found</td>
+                }
                 <td>@comment.Text</td>
             </tr>
         }
@@ -132,5 +139,4 @@ else
             message = e.Message;
         }
     }
-
 }

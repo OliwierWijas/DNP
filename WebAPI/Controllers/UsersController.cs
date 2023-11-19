@@ -84,49 +84,13 @@ public class UsersController : ControllerBase
             return Ok(token);
         }
         catch (Exception e)
-        {
+        { 
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
         }
     }
 
-    [HttpPatch, Authorize]
-    public async Task<ActionResult> UpdateAsync(UserUpdateDto dto)
-    {
-        try
-        {
-            string check = UsernameClaimValidation(dto.Username);
-            if (!string.IsNullOrEmpty(check))
-                return StatusCode(403, check);
-            await userLogic.UpdateAsync(dto);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
-    }
-
-    [HttpDelete("{username}"), Authorize]
-    public async Task<ActionResult> DeleteAsync([FromRoute] string username)
-    {
-        try
-        {
-            string check = UsernameClaimValidation(username);
-            if (!string.IsNullOrEmpty(check))
-                return StatusCode(403, check);
-            await userLogic.DeleteAsync(username);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
-    }
-
-    private string UsernameClaimValidation(string username)
+    /*private string UsernameClaimValidation(string username)
     {
         string message = "";
         Claim? usernameClaim = User.Claims.FirstOrDefault(claim => claim.Type.Equals(ClaimTypes.Name));
@@ -135,5 +99,5 @@ public class UsersController : ControllerBase
         if (!usernameClaim!.Value.Equals(username))
             message = "Cannot delete different users.";
         return message;
-    }
+    }*/
 }
